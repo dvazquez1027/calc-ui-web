@@ -22,27 +22,25 @@ describe("CalcButton.vue", () => {
 
   it("renders props.text when passed", async () => {
     const mockClick = jest.fn();
-    const msg = "new message";
-    const val = 1;
+    const keyCap = "0";
     const wrapper = mount(CalcButton, {
       localVue,
       propsData: {
-        text: msg,
-        value: val
+        keyCap: keyCap
       },
       listeners: {
         click: mockClick
       }
     });
     expect(wrapper.exists()).toBe(true);
-    expect(wrapper.text()).toMatch(msg);
+    expect(wrapper.text()).toMatch(keyCap);
 
     const button = wrapper.find("button");
 
     button.trigger("click");
     await wrapper.vm.$nextTick();
     expect(mockClick.mock.calls.length).toBe(1);
-    expect(mockClick.mock.calls[0]).toEqual([val]);
+    expect(mockClick.mock.calls[0]).toEqual([keyCap]);
 
     expect(console.error.mock.calls.length).toEqual(0);
   });

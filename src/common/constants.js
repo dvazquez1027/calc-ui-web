@@ -1,12 +1,23 @@
-const CalcOperations = {
-  PLUS: -1,
-  MINUS: -2,
-  MULTIPLY: -3,
-  DIVIDE: -4,
-  EQUALS: -5,
-  DECIMAL: -6,
-  CLEAR: -100,
-  CLEAR_ALL: -101
+export const CalcOperations = {
+  PLUS: "+",
+  MINUS: "-",
+  MULTIPLY: "*",
+  DIVIDE: "/",
+  EQUALS: "=",
+  DECIMAL: ".",
+  CLEAR: "C",
+  CLEAR_ALL: "AC"
 };
 
-export default CalcOperations;
+export const CalcDigits = {
+  ONE: "1",
+  TWO: "2",
+  THREE: "3",
+  FOUR: "4",
+  FIVE: "5",
+  SIX: "6",
+  SEVEN: "7",
+  EIGHT: "8",
+  NINE: "9",
+  ZERO: "0"
+};

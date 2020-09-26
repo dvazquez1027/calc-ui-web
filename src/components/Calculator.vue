@@ -8,7 +8,7 @@
 <script>
 import Keypad from "@/components/Keypad.vue";
 import Display from "@/components/Display.vue";
-import CalcOperations from "@/common/constants.js";
+import { CalcDigits, CalcOperations } from "@/common/constants.js";
 
 export default {
   name: "Calculator",
@@ -23,12 +23,30 @@ export default {
   },
   methods: {
     onClick(value) {
-      if (value >= 0 && value <= 9) {
-        this.$store.commit("inputDigit", value);
-      } else if (value === CalcOperations.CLEAR) {
-        this.$store.commit("clear");
-      } else if (value === CalcOperations.DECIMAL) {
-        this.$store.commit("inputDecimal");
+      switch (value) {
+        case CalcDigits.ONE:
+        case CalcDigits.TWO:
+        case CalcDigits.THREE:
+        case CalcDigits.FOUR:
+        case CalcDigits.FIVE:
+        case CalcDigits.SIX:
+        case CalcDigits.SEVEN:
+        case CalcDigits.EIGHT:
+        case CalcDigits.NINE:
+        case CalcDigits.ZERO:
+          this.$store.commit("inputDigit", value);
+          break;
+
+        case CalcOperations.CLEAR:
+          this.$store.commit("clear");
+          break;
+
+        case CalcOperations.DECIMAL:
+          this.$store.commit("inputDecimal");
+          break;
+
+        default:
+          break;
       }
     }
   }

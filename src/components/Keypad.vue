@@ -6,15 +6,13 @@
           <b-row>
             <b-col cols="6" style="padding-right: 1px">
               <calc-button
-                text="C"
-                :value="CalcOperations.CLEAR"
+                :keyCap="CalcOperations.CLEAR"
                 @click="onClick($event)"
               />
             </b-col>
             <b-col cols="6" style="padding-left: 1px">
               <calc-button
-                text="AC"
-                :value="CalcOperations.CLEAR_ALL"
+                :keyCap="CalcOperations.CLEAR_ALL"
                 @click="onClick($event)"
               />
             </b-col>
@@ -22,81 +20,72 @@
         </b-col>
         <b-col cols="3" class="pad">
           <calc-button
-            text="/"
-            :value="CalcOperations.DIVIDE"
+            :keyCap="CalcOperations.DIVIDE"
             @click="onClick($event)"
           />
         </b-col>
       </b-row>
       <b-row>
         <b-col cols="3" class="pad">
-          <calc-button text="1" :value="1" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.ONE" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
-          <calc-button text="2" :value="2" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.TWO" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
-          <calc-button text="3" :value="3" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.THREE" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
           <calc-button
-            text="*"
-            :value="CalcOperations.MULTIPLY"
+            :keyCap="CalcOperations.MULTIPLY"
             @click="onClick($event)"
           />
         </b-col>
       </b-row>
       <b-row>
         <b-col cols="3" class="pad">
-          <calc-button text="4" :value="4" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.FOUR" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
-          <calc-button text="5" :value="5" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.FIVE" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
-          <calc-button text="6" :value="6" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.SIX" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
           <calc-button
-            text="-"
-            :value="CalcOperations.MINUS"
+            :keyCap="CalcOperations.MINUS"
             @click="onClick($event)"
           />
         </b-col>
       </b-row>
       <b-row>
         <b-col cols="3" class="pad">
-          <calc-button text="7" :value="7" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.SEVEN" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
-          <calc-button text="8" :value="8" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.EIGHT" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
-          <calc-button text="9" :value="9" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.NINE" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
-          <calc-button
-            text="+"
-            :value="CalcOperations.PLUS"
-            @click="onClick($event)"
-          />
+          <calc-button :keyCap="CalcOperations.PLUS" @click="onClick($event)" />
         </b-col>
       </b-row>
       <b-row>
         <b-col cols="6" class="pad">
-          <calc-button text="0" :value="0" @click="onClick($event)" />
+          <calc-button :keyCap="CalcDigits.ZERO" @click="onClick($event)" />
         </b-col>
         <b-col cols="3" class="pad">
           <calc-button
-            text="."
-            :value="CalcOperations.DECIMAL"
+            :keyCap="CalcOperations.DECIMAL"
             @click="onClick($event)"
           />
         </b-col>
         <b-col cols="3" class="pad">
           <calc-button
-            text="="
-            :value="CalcOperations.EQUALS"
+            :keyCap="CalcOperations.EQUALS"
             @click="onClick($event)"
           />
         </b-col>
@@ -107,7 +96,7 @@
 
 <script>
 import CalcButton from "@/components/CalcButton.vue";
-import CalcOperations from "@/common/constants.js";
+import { CalcDigits, CalcOperations } from "@/common/constants.js";
 
 export default {
   name: "Keypad",
@@ -115,6 +104,7 @@ export default {
     "calc-button": CalcButton
   },
   created() {
+    this.CalcDigits = CalcDigits;
     this.CalcOperations = CalcOperations;
   },
   methods: {

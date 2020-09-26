@@ -11,7 +11,7 @@ export default {
   name: "Display",
   props: {
     result: {
-      type: Number,
+      type: String,
       required: true
     }
   }

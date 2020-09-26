@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button variant="secondary" block @click="onClick()">
-      {{ text }}
+      {{ keyCap }}
     </b-button>
   </div>
 </template>
@@ -10,18 +10,14 @@
 export default {
   name: "CalcButton",
   props: {
-    text: {
+    keyCap: {
       type: String,
-      required: true
-    },
-    value: {
-      type: Number,
       required: true
     }
   },
   methods: {
     onClick() {
-      this.$emit("click", this.value);
+      this.$emit("click", this.keyCap);
     }
   }
 };
