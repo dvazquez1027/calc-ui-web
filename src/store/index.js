@@ -5,16 +5,35 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    value: 0
+    wholePart: 0,
+    fractionalPart: 0,
+    decimalEntered: false
   },
   mutations: {
-    store(state, value) {
+    set(state, value) {
       state.value = value;
+    },
+    inputDigit(state, value) {
+      if (!state.decimalEntered) {
+        state.wholePart = 10 * state.wholePart + value;
+      } else {
+        state.fractionalPart = 10 * state.fractionalPart + value;
+      }
+    },
+    inputDecimal(state) {
+      state.decimalEntered = true;
+    },
+    clear(state) {
+      state.wholePart = state.fractionalPart = 0;
+      state.decimalEntered = false;
     }
   },
   getters: {
-    result(state) { 
-      return state.value;
+    result(state) {
+      return (
+        state.wholePart +
+        (state.fractionalPart > 0 ? "." + state.fractionalPart : "")
+      );
     }
   },
   actions: {},
