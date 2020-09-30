@@ -34,15 +34,23 @@ export default {
         case CalcDigits.EIGHT:
         case CalcDigits.NINE:
         case CalcDigits.ZERO:
-          this.$store.commit("inputDigit", value);
+          this.$store.dispatch("inputDigit", value);
           break;
 
         case CalcOperations.CLEAR:
-          this.$store.commit("clear");
+          this.$store.dispatch("inputClear");
           break;
 
         case CalcOperations.DECIMAL:
-          this.$store.commit("inputDecimal");
+          this.$store.dispatch("inputDecimal");
+          break;
+
+        case CalcOperations.PLUS:
+        case CalcOperations.MINUS:
+        case CalcOperations.MULTIPLY:
+        case CalcOperations.DIVIDE:
+        case CalcOperations.EQUALS:
+          this.$store.dispatch("inputOperator", value);
           break;
 
         default:
