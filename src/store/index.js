@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from "axios";
 import { CalcOperations } from "@/common/constants.js";
 
 Vue.use(Vuex);
@@ -10,7 +11,8 @@ export default new Vuex.Store({
     fractionalPart: "",
     decimalEntered: false,
     operatorEntered: false,
-    stack: []
+    stack: [],
+    calculatorID: null
   },
   mutations: {
     appendToWholePart(state, value) {
@@ -28,6 +30,9 @@ export default new Vuex.Store({
     clear(state) {
       state.wholePart = state.fractionalPart = "";
       state.decimalEntered = state.operatorEntered = false;
+    },
+    setCalculatorID(state, id) {
+      state.calculatorID = id;
     }
   },
   getters: {
@@ -38,6 +43,9 @@ export default new Vuex.Store({
           ? "." + (state.fractionalPart !== "" ? state.fractionalPart : "0")
           : "")
       );
+    },
+    calculatorID(state) {
+      return state.calculatorID;
     }
   },
   actions: {
@@ -68,11 +76,28 @@ export default new Vuex.Store({
 
       context.commit("setDecimalEntered", true);
     },
-    inputOperator(context, operator) {
+    async inputOperator(context, operator) {
       if (context.state.stack.length === 2) {
         let op = context.state.stack.pop();
         let operand = context.state.stack.pop();
 
+        if (context.getters.calculatorID == null) {
+          let response = await axios.post("http://localhost:5000/v1/calculator", {
+            result: operand
+          });
+          context.commit("setCalculatorID", response.data.id);
+        }
+
+        let response = await axios.put("http://localhost:5000/v1/calculator/" + context.getters.calculatorID, {
+          operations: [{
+            operationType: op,
+            operand: context.getters.result
+          }]
+        });
+        console.log(response);
+        context.dispatch("initialize", String(response.data.result));
+
+        /*
         switch (op) {
           case CalcOperations.PLUS:
             context.dispatch(
@@ -105,6 +130,7 @@ export default new Vuex.Store({
           default:
             break;
         }
+        */
       }
       if (operator !== CalcOperations.EQUALS) {
         context.state.stack.push(context.getters.result);
