@@ -6,7 +6,24 @@ export const CalcOperations = {
   EQUALS: "=",
   DECIMAL: ".",
   CLEAR: "C",
-  CLEAR_ALL: "AC"
+  CLEAR_ALL: "AC",
+  precedence: function(operator) {
+    switch (operator) {
+      case CalcOperations.PLUS:
+      case CalcOperations.MINUS:
+        return 1;
+
+      case CalcOperations.MULTIPLY:
+      case CalcOperations.DIVIDE:
+        return 2;
+
+      case CalcOperations.EQUALS:
+        return 0;
+
+      default:
+        return -1;
+    }
+  }
 };
 
 export const CalcDigits = {

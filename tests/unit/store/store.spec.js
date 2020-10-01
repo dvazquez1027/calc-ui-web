@@ -134,4 +134,41 @@ describe("store.js", () => {
 
     expect(console.error).toBeCalledTimes(0);
   });
+
+  it('Uses latest operator', () => {
+    store.dispatch("internal/inputDigit", "2");
+    store.dispatch("internal/inputDigit", "5");
+    store.dispatch("internal/inputOperator", CalcOperations.DIVIDE);
+    store.dispatch("internal/inputOperator", CalcOperations.PLUS);
+    store.dispatch("internal/inputDigit", "2");
+    store.dispatch("internal/inputDigit", "5");
+    store.dispatch("internal/inputOperator", CalcOperations.EQUALS);
+    expect(store.getters["internal/result"]).toBe("50");
+
+    expect(console.error).toBeCalledTimes(0);
+  });
+
+  it("Obeys order of operations", () => {
+    store.dispatch("internal/inputDigit", "2");
+    store.dispatch("internal/inputDigit", "5");
+    store.dispatch("internal/inputOperator", CalcOperations.PLUS);
+    store.dispatch("internal/inputDigit", "2");
+    store.dispatch("internal/inputDigit", "5");
+    store.dispatch("internal/inputOperator", CalcOperations.MULTIPLY);
+    store.dispatch("internal/inputDigit", "3");
+    store.dispatch("internal/inputOperator", CalcOperations.EQUALS);
+    expect(store.getters["internal/result"]).toBe("100");
+
+    store.dispatch("internal/inputDigit", "5");
+    store.dispatch("internal/inputOperator", CalcOperations.MULTIPLY);
+    store.dispatch("internal/inputDigit", "5");
+    store.dispatch("internal/inputOperator", CalcOperations.PLUS);
+    store.dispatch("internal/inputDigit", "5");
+    store.dispatch("internal/inputOperator", CalcOperations.MULTIPLY);
+    store.dispatch("internal/inputDigit", "3");
+    store.dispatch("internal/inputOperator", CalcOperations.EQUALS);
+    expect(store.getters["internal/result"]).toBe("40");
+
+    expect(console.error).toBeCalledTimes(0);
+  });
 });
