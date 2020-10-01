@@ -16,9 +16,15 @@ export default {
     keypad: Keypad,
     display: Display
   },
+  props: {
+    namespace: {
+      type: String,
+      default: "internal/"
+    }
+  },
   computed: {
     result() {
-      return this.$store.getters.result;
+      return this.$store.getters[this.namespace + "result"];
     }
   },
   methods: {
@@ -34,15 +40,15 @@ export default {
         case CalcDigits.EIGHT:
         case CalcDigits.NINE:
         case CalcDigits.ZERO:
-          this.$store.dispatch("inputDigit", value);
+          this.$store.dispatch(this.namespace + "inputDigit", value);
           break;
 
         case CalcOperations.CLEAR:
-          this.$store.dispatch("inputClear");
+          this.$store.dispatch(this.namespace + "inputClear");
           break;
 
         case CalcOperations.DECIMAL:
-          this.$store.dispatch("inputDecimal");
+          this.$store.dispatch(this.namespace + "inputDecimal");
           break;
 
         case CalcOperations.PLUS:
@@ -50,7 +56,7 @@ export default {
         case CalcOperations.MULTIPLY:
         case CalcOperations.DIVIDE:
         case CalcOperations.EQUALS:
-          this.$store.dispatch("inputOperator", value);
+          this.$store.dispatch(this.namespace + "inputOperator", value);
           break;
 
         default:
