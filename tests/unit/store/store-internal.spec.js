@@ -135,7 +135,7 @@ describe("store internal implementation", () => {
     expect(console.error).toBeCalledTimes(0);
   });
 
-  it('Uses latest operator', () => {
+  it("Uses latest operator", () => {
     store.dispatch("internal/inputDigit", "2");
     store.dispatch("internal/inputDigit", "5");
     store.dispatch("internal/inputOperator", CalcOperations.DIVIDE);

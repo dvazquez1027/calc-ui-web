@@ -222,7 +222,7 @@ describe("store external implementation", () => {
     expect(console.error).toBeCalledTimes(0);
   });
 
-  it('Uses latest operator', async () => {
+  it("Uses latest operator", async () => {
     const postResponse = {
       data: {
         id: "calculator",

@@ -17,14 +17,17 @@ export default {
     display: Display
   },
   props: {
-    namespace: {
+    type: {
       type: String,
-      default: "internal/"
+      default: "internal"
     }
   },
   computed: {
     result() {
       return this.$store.getters[this.namespace + "result"];
+    },
+    namespace() {
+      return this.type + "/";
     }
   },
   methods: {
@@ -45,6 +48,10 @@ export default {
 
         case CalcOperations.CLEAR:
           this.$store.dispatch(this.namespace + "inputClear");
+          break;
+
+        case CalcOperations.CLEAR_ALL:
+          this.$store.dispatch(this.namespace + "inputClearAll");
           break;
 
         case CalcOperations.DECIMAL:
