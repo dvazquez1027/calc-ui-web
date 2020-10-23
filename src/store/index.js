@@ -77,7 +77,10 @@ const internal = {
       } else if (context.state.stack.length > 0) {
         while (
           context.state.stack.length > 0 &&
-          CalcOperations.precedence(operator) <= CalcOperations.precedence(context.state.stack[context.state.stack.length - 1])
+          CalcOperations.precedence(operator) <=
+            CalcOperations.precedence(
+              context.state.stack[context.state.stack.length - 1]
+            )
         ) {
           let op = context.state.stack.pop();
           let operand = context.state.stack.pop();
@@ -135,12 +138,12 @@ const internal = {
 const external = {
   namespaced: true,
   state: {
+    calculatorID: null,
     wholePart: "",
     fractionalPart: "",
     decimalEntered: false,
     operatorEntered: false,
-    stack: [],
-    calculatorID: null
+    stack: []
   },
   mutations: {
     appendToWholePart(state, value) {
@@ -205,33 +208,45 @@ const external = {
       context.commit("setDecimalEntered", true);
     },
     async inputOperator(context, operator) {
-      if (context.state.stack.length === 2) {
-        let op = context.state.stack.pop();
-        let operand = context.state.stack.pop();
+      console.log("meow");
+      if (context.state.operatorEntered) {
+        context.state.stack.pop();
+        context.state.stack.pop();
+      } else if (context.state.stack.length > 0) {
+        while (
+          context.state.stack.length > 0 &&
+          CalcOperations.precedence(operator) <=
+            CalcOperations.precedence(
+              context.state.stack[context.state.stack.length - 1]
+            )
+        ) {
+          let op = context.state.stack.pop();
+          let operand = context.state.stack.pop();
 
-        if (context.getters.calculatorID == null) {
-          let createResponse = await axios.post(
-            "http://localhost:5000/v1/calculator",
+          if (context.getters.calculatorID == null) {
+            let createResponse = await axios.post(
+              "http://localhost:5000/v1/calculator",
+              {
+                result: operand
+              }
+            );
+            context.commit("setCalculatorID", createResponse.data.id);
+          }
+
+          let updateResponse = await axios.put(
+            "http://localhost:5000/v1/calculator/" +
+              context.getters.calculatorID,
             {
-              result: operand
+              operations: [
+                {
+                  operationType: op,
+                  operand: context.getters.result
+                }
+              ]
             }
           );
-          context.commit("setCalculatorID", createResponse.data.id);
+          context.dispatch("initialize", String(updateResponse.data.result));
         }
-
-        let updateResponse = await axios.put(
-          "http://localhost:5000/v1/calculator/" + context.getters.calculatorID,
-          {
-            operations: [
-              {
-                operationType: op,
-                operand: context.getters.result
-              }
-            ]
-          }
-        );
-        console.log(updateResponse);
-        context.dispatch("initialize", String(updateResponse.data.result));
       }
       if (operator !== CalcOperations.EQUALS) {
         context.state.stack.push(context.getters.result);
@@ -241,6 +256,17 @@ const external = {
     },
     inputClear(context) {
       context.commit("clear");
+    },
+    async inputClearAll(context) {
+      context.commit("clear");
+      context.state.stack.length = 0;
+      if (context.getters.calculatorID !== null) {
+        let deleteResponse = await axios.delete(
+          "http://localhost:5000/v1/calculator/" + context.getters.calculatorID
+        );
+        console.log(deleteResponse);
+        context.commit("setCalculatorID", null);
+      }
     }
   }
 };

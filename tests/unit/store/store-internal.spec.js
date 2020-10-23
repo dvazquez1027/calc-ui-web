@@ -1,7 +1,7 @@
 import store from "@/store";
 import { CalcOperations } from "@/common/constants.js";
 
-describe("store.js", () => {
+describe("store internal implementation", () => {
   const originalConsoleError = console.error;
 
   beforeEach(() => {
