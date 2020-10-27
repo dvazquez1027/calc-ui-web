@@ -239,10 +239,9 @@ const external = {
       context.commit("clear");
       context.state.stack.length = 0;
       if (context.getters.calculatorID !== null) {
-        let deleteResponse = await axios.delete(
+        await axios.delete(
           "http://localhost:5000/v1/calculator/" + context.getters.calculatorID
         );
-        console.log(deleteResponse);
         context.commit("setCalculatorID", null);
       }
     }

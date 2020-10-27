@@ -12,6 +12,7 @@ describe("store external implementation", () => {
   });
 
   afterEach(() => {
+    axios.delete.mockImplementationOnce(() => Promise.resolve({}));
     store.dispatch("external/inputClearAll");
     console.error = originalConsoleError;
   });
@@ -66,49 +67,67 @@ describe("store external implementation", () => {
     expect(console.error).toBeCalledTimes(0);
   });
 
-  it("Performs addition", async () => {
+  it("Performs addition on whole numbers", async () => {
     const postResponse = {
       data: {
         id: "calculator",
-        result: 25
+        result: 0.0
       }
     };
-    const putResponse = {
-      data: {
-        id: "calculator",
-        result: 50
+    const putResponses = [
+      {
+        data: {
+          id: "calculator",
+          result: 50
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 25
+        }
       }
-    };
+    ];
     axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
-    axios.put.mockImplementationOnce(() => Promise.resolve(putResponse));
+    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.PLUS);
+    await store.dispatch("external/inputOperator", CalcOperations.PLUS);
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
     expect(store.getters["external/result"]).toBe("50");
+  });
 
-    const postResponse2 = {
+  it("Performances additional on real numbers.", async () => {
+    const postResponse = {
       data: {
         id: "calculator",
         result: 25.93
       }
     };
-    const putResponse2 = {
-      data: {
-        id: "calculator",
-        result: 26
+    const putResponses = [
+      {
+        data: {
+          id: "calculator",
+          result: 26
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 25.93
+        }
       }
-    };
-    axios.post.mockImplementationOnce(() => Promise.resolve(postResponse2));
-    axios.put.mockImplementationOnce(() => Promise.resolve(putResponse2));
+    ];
+    axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
+    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     store.dispatch("external/inputDecimal");
     store.dispatch("external/inputDigit", "9");
     store.dispatch("external/inputDigit", "3");
-    store.dispatch("external/inputOperator", CalcOperations.PLUS);
+    await store.dispatch("external/inputOperator", CalcOperations.PLUS);
     store.dispatch("external/inputDecimal");
     store.dispatch("external/inputDigit", "0");
     store.dispatch("external/inputDigit", "7");
@@ -118,49 +137,67 @@ describe("store external implementation", () => {
     expect(console.error).toBeCalledTimes(0);
   });
 
-  it("Performs subtraction", async () => {
+  it("Performs subtraction on whole numbers", async () => {
     const postResponse = {
-      data: {
-        id: "calculator",
-        result: 25
-      }
-    };
-    const putResponse = {
       data: {
         id: "calculator",
         result: 0
       }
     };
+    const putResponses = [
+      {
+        data: {
+          id: "calculator",
+          result: 0
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 25
+        }
+      }
+    ];
     axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
-    axios.put.mockImplementationOnce(() => Promise.resolve(putResponse));
+    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.MINUS);
+    await store.dispatch("external/inputOperator", CalcOperations.MINUS);
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
     expect(store.getters["external/result"]).toBe("0");
+  });
 
-    const postResponse2 = {
+  it("Performs substraction on real numbers.", async () => {
+    const postResponse = {
       data: {
         id: "calculator",
-        result: 25.33
+        result: 0
       }
     };
-    const putResponse2 = {
-      data: {
-        id: "calculator",
-        result: 25
+    const putResponses = [
+      {
+        data: {
+          id: "calculator",
+          result: 25
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 25.33
+        }
       }
-    };
-    axios.post.mockImplementationOnce(() => Promise.resolve(postResponse2));
-    axios.put.mockImplementationOnce(() => Promise.resolve(putResponse2));
+    ];
+    axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
+    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     store.dispatch("external/inputDecimal");
     store.dispatch("external/inputDigit", "3");
     store.dispatch("external/inputDigit", "3");
-    store.dispatch("external/inputOperator", CalcOperations.MINUS);
+    await store.dispatch("external/inputOperator", CalcOperations.MINUS);
     store.dispatch("external/inputDecimal");
     store.dispatch("external/inputDigit", "3");
     store.dispatch("external/inputDigit", "3");
@@ -174,20 +211,28 @@ describe("store external implementation", () => {
     const postResponse = {
       data: {
         id: "calculator",
-        result: 25
+        result: 0
       }
     };
-    const putResponse = {
-      data: {
-        id: "calculator",
-        result: 625
+    const putResponses = [
+      {
+        data: {
+          id: "calculator",
+          result: 625
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 25
+        }
       }
-    };
+    ];
     axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
-    axios.put.mockImplementationOnce(() => Promise.resolve(putResponse));
+    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
+    await store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
@@ -203,17 +248,25 @@ describe("store external implementation", () => {
         result: 25
       }
     };
-    const putResponse = {
-      data: {
-        id: "calculator",
-        result: 1
+    const putResponses = [
+      {
+        data: {
+          id: "calculator",
+          result: 1
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 1
+        }
       }
-    };
+    ];
     axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
-    axios.put.mockImplementationOnce(() => Promise.resolve(putResponse));
+    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.DIVIDE);
+    await store.dispatch("external/inputOperator", CalcOperations.DIVIDE);
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
@@ -226,21 +279,35 @@ describe("store external implementation", () => {
     const postResponse = {
       data: {
         id: "calculator",
-        result: 25
+        result: 0
       }
     };
-    const putResponse = {
-      data: {
-        id: "calculator",
-        result: 50
+    const putResponses = [
+      {
+        data: {
+          id: "calculator",
+          result: 50
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 25
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 25
+        }
       }
-    };
+    ];
     axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
-    axios.put.mockImplementationOnce(() => Promise.resolve(putResponse));
+    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.DIVIDE);
-    store.dispatch("external/inputOperator", CalcOperations.PLUS);
+    await store.dispatch("external/inputOperator", CalcOperations.DIVIDE);
+    await store.dispatch("external/inputOperator", CalcOperations.PLUS);
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
@@ -253,7 +320,7 @@ describe("store external implementation", () => {
     const postResponse = {
       data: {
         id: "calculator",
-        result: 25
+        result: 0
       }
     };
     const putResponses = [
@@ -266,39 +333,7 @@ describe("store external implementation", () => {
       {
         data: {
           id: "calculator",
-          result: 75
-        }
-      }
-    ];
-    axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
-    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
-    store.dispatch("external/inputDigit", "2");
-    store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.PLUS);
-    store.dispatch("external/inputDigit", "2");
-    store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
-    store.dispatch("external/inputDigit", "3");
-    await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("100");
-
-    const postResponse2 = {
-      data: {
-        id: "calculator",
-        result: 5
-      }
-    };
-    const putResponses2 = [
-      {
-        data: {
-          id: "calculator",
-          result: 40
-        }
-      },
-      {
-        data: {
-          id: "calculator",
-          result: 100
+          result: 25
         }
       },
       {
@@ -308,14 +343,60 @@ describe("store external implementation", () => {
         }
       }
     ];
-    axios.post.mockImplementationOnce(() => Promise.resolve(postResponse2));
-    axios.put.mockImplementation(() => Promise.resolve(putResponses2.pop()));
+    axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
+    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
+    store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
+    await store.dispatch("external/inputOperator", CalcOperations.PLUS);
+    store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.PLUS);
+    await store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
+    store.dispatch("external/inputDigit", "3");
+    await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
+    expect(store.getters["external/result"]).toBe("100");
+  });
+
+  it("Obeys order of operations 2.", async () => {
+    const postResponse = {
+      data: {
+        id: "calculator",
+        result: 0
+      }
+    };
+    const putResponses = [
+      {
+        data: {
+          id: "calculator",
+          result: 40
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 5
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 25
+        }
+      },
+      {
+        data: {
+          id: "calculator",
+          result: 5
+        }
+      }
+    ];
+    axios.post.mockImplementationOnce(() => Promise.resolve(postResponse));
+    axios.put.mockImplementation(() => Promise.resolve(putResponses.pop()));
     store.dispatch("external/inputDigit", "5");
-    store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
+    await store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
+    store.dispatch("external/inputDigit", "5");
+    await store.dispatch("external/inputOperator", CalcOperations.PLUS);
+    store.dispatch("external/inputDigit", "5");
+    await store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
     store.dispatch("external/inputDigit", "3");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
     expect(store.getters["external/result"]).toBe("40");
