@@ -23,6 +23,24 @@ export const CalcOperations = {
       default:
         return -1;
     }
+  },
+  operate: function(operator, left, right) {
+    switch (operator) {
+      case CalcOperations.PLUS:
+        return left + right;
+
+      case CalcOperations.MINUS:
+        return left - right;
+
+      case CalcOperations.MULTIPLY:
+        return left * right;
+
+      case CalcOperations.DIVIDE:
+        return left / right;
+
+      default:
+        break;
+    }
   }
 };
 

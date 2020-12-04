@@ -12,7 +12,8 @@ const internal = {
     fractionalPart: "",
     decimalEntered: false,
     operatorEntered: false,
-    stack: []
+    stack: [],
+    lastOperation: null
   },
   mutations: {
     appendToWholePart(state, value) {
@@ -71,57 +72,48 @@ const internal = {
       context.commit("setDecimalEntered", true);
     },
     inputOperator(context, operator) {
-      if (context.state.operatorEntered) {
-        context.state.stack.pop();
+      let workingOperation = {
+        operator: operator,
+        operand: Number(context.getters.result)
+      };
+
+      if (context.state.operatorEntered && context.state.stack.length > 0) {
         context.state.stack.pop();
       } else if (context.state.stack.length > 0) {
+        context.state.lastOperation = {
+          operator: context.state.stack[context.state.stack.length - 1].operator,
+          operand: context.getters.result
+        };
         while (
           context.state.stack.length > 0 &&
           CalcOperations.precedence(operator) <=
             CalcOperations.precedence(
-              context.state.stack[context.state.stack.length - 1]
+              context.state.stack[context.state.stack.length - 1].operator
             )
         ) {
           let op = context.state.stack.pop();
-          let operand = context.state.stack.pop();
-
-          switch (op) {
-            case CalcOperations.PLUS:
-              context.dispatch(
-                "initialize",
-                Number(operand) + Number(context.getters.result) + ""
-              );
-              break;
-
-            case CalcOperations.MINUS:
-              context.dispatch(
-                "initialize",
-                Number(operand) - Number(context.getters.result) + ""
-              );
-              break;
-
-            case CalcOperations.MULTIPLY:
-              context.dispatch(
-                "initialize",
-                Number(operand) * Number(context.getters.result) + ""
-              );
-              break;
-
-            case CalcOperations.DIVIDE:
-              context.dispatch(
-                "initialize",
-                Number(operand) / Number(context.getters.result) + ""
-              );
-              break;
-
-            default:
-              break;
-          }
+          workingOperation.operand = CalcOperations.operate(
+            op.operator,
+            op.operand,
+            workingOperation.operand
+          );
         }
+        context.dispatch("initialize", workingOperation.operand + "");
+      } else if (
+        context.state.lastOperation !== null &&
+        operator == CalcOperations.EQUALS
+      ) {
+        context.dispatch(
+          "initialize",
+          CalcOperations.operate(
+            context.state.lastOperation.operator,
+            Number(context.state.lastOperation.operand),
+            Number(context.getters.result)
+          ) + ""
+        );
       }
       if (operator !== CalcOperations.EQUALS) {
-        context.state.stack.push(context.getters.result);
-        context.state.stack.push(operator);
+        context.state.stack.push(workingOperation);
       }
       context.commit("setOperatorEntered", true);
     },
