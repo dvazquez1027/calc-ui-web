@@ -1,4 +1,4 @@
-# This workflow installs dependencies, run unit tests and run lint when code is pushed to feature branch.
+# This workflow installs dependencies, runs unit tests and runs lint when code is pushed to feature branch.
 
 name: Push to Feature Branch
 
