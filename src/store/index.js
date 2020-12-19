@@ -81,7 +81,8 @@ const internal = {
         context.state.stack.pop();
       } else if (context.state.stack.length > 0) {
         context.state.lastOperation = {
-          operator: context.state.stack[context.state.stack.length - 1].operator,
+          operator:
+            context.state.stack[context.state.stack.length - 1].operator,
           operand: context.getters.result
         };
         while (

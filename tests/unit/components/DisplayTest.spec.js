@@ -37,7 +37,7 @@ describe("Keypad.vue", () => {
 
   it("Error when missing properties", () => {
     // when
-    const wrapper = mount(Display, {
+    mount(Display, {
       localVue
     });
 
