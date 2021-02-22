@@ -81,7 +81,8 @@ const internal = {
         context.state.stack.pop();
       } else if (context.state.stack.length > 0) {
         context.state.lastOperation = {
-          operator: context.state.stack[context.state.stack.length - 1].operator,
+          operator:
+            context.state.stack[context.state.stack.length - 1].operator,
           operand: context.getters.result
         };
         while (
@@ -212,14 +213,12 @@ const external = {
 
       let updateResponse = await axios.put(
         "http://localhost:5000/v1/calculator/" + context.getters.calculatorID,
-        {
-          operations: [
-            {
-              operationType: operator,
-              operand: context.getters.result
-            }
-          ]
-        }
+        [
+          {
+            operator: operator,
+            operand: context.getters.result
+          }
+        ]
       );
       context.dispatch("initialize", String(updateResponse.data.result));
       context.commit("setOperatorEntered", true);
