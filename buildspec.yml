@@ -1,0 +1,19 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      # Install all dependencies (including dependencies for running tests)
+      - npm install
+  pre_build:
+    commands:
+      # Discover and run unit tests in the '__tests__' directory
+      - npm run test:unit
+      # Remove all dependencies not needed for the Lambda deployment package (the packages from devDependencies in package.json)
+      - npm prune --production
+  build:
+    commands:
+      - npm run build
+artifacts:
+  type: directory
+  directory:
+    dist/
