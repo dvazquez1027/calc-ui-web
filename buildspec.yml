@@ -12,6 +12,6 @@ phases:
     commands:
       - npm run build
 artifacts:
-  type: directory
-  directory:
-    dist/
+  type: zip
+  files:
+    - dist/*
