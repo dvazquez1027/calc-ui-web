@@ -3,7 +3,7 @@ phases:
   install:
     commands:
       # Install all dependencies (including dependencies for running tests)
-      - npm install
+      - npm ci
   pre_build:
     commands:
       # Discover and run unit tests in the '__tests__' directory
@@ -14,4 +14,5 @@ phases:
 artifacts:
   type: zip
   files:
-    - dist/*
+    - '**/*'
+  base-directory: dist
