@@ -1,5 +1,5 @@
 <template>
-  <div class="internal">
+  <div id="internal">
     <h1>Internal Calculator</h1>
     <p>This is a calculator implemented in JavaScript.</p>
     <calculator />
@@ -16,3 +16,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+div #internal {
+  text-align: center;
+}
+</style>

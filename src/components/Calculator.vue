@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 250px">
+  <div id="calculator">
     <display :result="result" />
     <keypad @click="onClick($event)" />
   </div>
@@ -74,4 +74,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+div #calculator {
+  width: 250px;
+  margin: auto;
+}
+</style>

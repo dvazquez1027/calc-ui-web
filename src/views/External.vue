@@ -1,5 +1,5 @@
 <template>
-  <div class="external">
+  <div id="external">
     <h1>External Calculator</h1>
     <p>This calculator is backed by a RESTful service.</p>
     <calculator type="external" />
@@ -16,3 +16,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+div #external {
+  text-align: center;
+}
+</style>

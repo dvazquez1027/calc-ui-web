@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div id="home">
     <h1>Calculator</h1>
     <p>
       Welcome to the Calculator App. Select Internal or External links to use a
@@ -14,3 +14,9 @@ export default {
   name: "Home"
 };
 </script>
+
+<style lang="scss" scoped>
+div #home {
+  text-align: center;
+}
+</style>
