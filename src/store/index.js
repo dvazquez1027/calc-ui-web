@@ -13,7 +13,7 @@ const internal = {
     decimalEntered: false,
     operatorEntered: false,
     stack: [],
-    lastOperation: null
+    lastOperation: null,
   },
   mutations: {
     appendToWholePart(state, value) {
@@ -31,7 +31,7 @@ const internal = {
     clear(state) {
       state.wholePart = state.fractionalPart = "";
       state.decimalEntered = state.operatorEntered = false;
-    }
+    },
   },
   getters: {
     result(state) {
@@ -41,7 +41,7 @@ const internal = {
           ? "." + (state.fractionalPart !== "" ? state.fractionalPart : "0")
           : "")
       );
-    }
+    },
   },
   actions: {
     initialize(context, value) {
@@ -74,7 +74,7 @@ const internal = {
     inputOperator(context, operator) {
       let workingOperation = {
         operator: operator,
-        operand: Number(context.getters.result)
+        operand: Number(context.getters.result),
       };
 
       if (context.state.operatorEntered && context.state.stack.length > 0) {
@@ -83,7 +83,7 @@ const internal = {
         context.state.lastOperation = {
           operator:
             context.state.stack[context.state.stack.length - 1].operator,
-          operand: context.getters.result
+          operand: context.getters.result,
         };
         while (
           context.state.stack.length > 0 &&
@@ -124,8 +124,8 @@ const internal = {
     inputClearAll(context) {
       context.commit("clear");
       context.state.stack.length = 0;
-    }
-  }
+    },
+  },
 };
 
 const external = {
@@ -136,7 +136,8 @@ const external = {
     fractionalPart: "",
     decimalEntered: false,
     operatorEntered: false,
-    stack: []
+    stack: [],
+    config: {}
   },
   mutations: {
     appendToWholePart(state, value) {
@@ -157,6 +158,9 @@ const external = {
     },
     setCalculatorID(state, id) {
       state.calculatorID = id;
+    },
+    setConfig(state, config) {
+      state.config = config;
     }
   },
   getters: {
@@ -170,6 +174,9 @@ const external = {
     },
     calculatorID(state) {
       return state.calculatorID;
+    },
+    config(state) {
+      return state.config;
     }
   },
   actions: {
@@ -203,21 +210,23 @@ const external = {
     async inputOperator(context, operator) {
       if (context.getters.calculatorID == null) {
         let createResponse = await axios.post(
-          "http://localhost:5000/v1/calculator",
+          context.getters.config.calcServerURL + "/calculator",
           {
-            result: 0.0
+            result: 0.0,
           }
         );
         context.commit("setCalculatorID", createResponse.data.id);
       }
 
       let updateResponse = await axios.put(
-        "http://localhost:5000/v1/calculator/" + context.getters.calculatorID,
+        context.getters.config.calcServerURL +
+          "/calculator/" +
+          context.getters.calculatorID,
         [
           {
             operator: operator,
-            operand: context.getters.result
-          }
+            operand: context.getters.result,
+          },
         ]
       );
       context.dispatch("initialize", String(updateResponse.data.result));
@@ -231,17 +240,19 @@ const external = {
       context.state.stack.length = 0;
       if (context.getters.calculatorID !== null) {
         await axios.delete(
-          "http://localhost:5000/v1/calculator/" + context.getters.calculatorID
+          context.getters.config.calcServerURL +
+            "/calculator/" +
+            context.getters.calculatorID
         );
         context.commit("setCalculatorID", null);
       }
-    }
-  }
+    },
+  },
 };
 
 export default new Vuex.Store({
   modules: {
     internal: internal,
-    external: external
-  }
+    external: external,
+  },
 });
