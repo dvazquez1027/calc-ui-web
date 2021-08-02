@@ -19,10 +19,8 @@ describe("store external implementation", () => {
 
   it("Accepts whole numbers", () => {
     store.dispatch("external/inputDigit", "8");
-    expect(store.getters["external/result"]).toBe("8");
-
     store.dispatch("external/inputDigit", "9");
-    expect(store.getters["external/result"]).toBe("89");
+    expect(store.getters["external/result"]).toBe(89);
 
     expect(console.error).toBeCalledTimes(0);
   });
@@ -31,14 +29,14 @@ describe("store external implementation", () => {
     store.dispatch("external/inputDecimal");
     store.dispatch("external/inputDigit", "8");
     store.dispatch("external/inputDigit", "9");
-    expect(store.getters["external/result"]).toBe("0.89");
+    expect(store.getters["external/result"]).toBe(0.89);
 
     store.dispatch("external/inputClear");
 
     store.dispatch("external/inputDecimal");
     store.dispatch("external/inputDigit", "0");
     store.dispatch("external/inputDigit", "7");
-    expect(store.getters["external/result"]).toBe("0.07");
+    expect(store.getters["external/result"]).toBe(0.07);
 
     expect(console.error).toBeCalledTimes(0);
   });
@@ -50,20 +48,20 @@ describe("store external implementation", () => {
     store.dispatch("external/inputDigit", "8");
     store.dispatch("external/inputDigit", "9");
 
-    expect(store.getters["external/result"]).toBe("89.89");
+    expect(store.getters["external/result"]).toBe(89.89);
 
     expect(console.error).toBeCalledTimes(0);
   });
 
   it("Accepts initial value", () => {
     store.dispatch("external/initialize", "45");
-    expect(store.getters["external/result"]).toBe("45");
+    expect(store.getters["external/result"]).toBe(45);
   });
 
   it("Clears", () => {
     store.dispatch("external/initialize", "89.89");
     store.dispatch("external/inputClear");
-    expect(store.getters["external/result"]).toBe("0");
+    expect(store.getters["external/result"]).toBe(0);
     expect(console.error).toBeCalledTimes(0);
   });
 
@@ -96,7 +94,7 @@ describe("store external implementation", () => {
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("50");
+    expect(store.getters["external/result"]).toBe(50);
   });
 
   it("Performances additional on real numbers.", async () => {
@@ -132,7 +130,7 @@ describe("store external implementation", () => {
     store.dispatch("external/inputDigit", "0");
     store.dispatch("external/inputDigit", "7");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("26");
+    expect(store.getters["external/result"]).toBe(26);
 
     expect(console.error).toBeCalledTimes(0);
   });
@@ -166,7 +164,7 @@ describe("store external implementation", () => {
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("0");
+    expect(store.getters["external/result"]).toBe(0);
   });
 
   it("Performs substraction on real numbers.", async () => {
@@ -202,7 +200,7 @@ describe("store external implementation", () => {
     store.dispatch("external/inputDigit", "3");
     store.dispatch("external/inputDigit", "3");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("25");
+    expect(store.getters["external/result"]).toBe(25);
 
     expect(console.error).toBeCalledTimes(0);
   });
@@ -236,7 +234,7 @@ describe("store external implementation", () => {
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("625");
+    expect(store.getters["external/result"]).toBe(625);
 
     expect(console.error).toBeCalledTimes(0);
   });
@@ -270,7 +268,7 @@ describe("store external implementation", () => {
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("1");
+    expect(store.getters["external/result"]).toBe(1);
 
     expect(console.error).toBeCalledTimes(0);
   });
@@ -311,7 +309,7 @@ describe("store external implementation", () => {
     store.dispatch("external/inputDigit", "2");
     store.dispatch("external/inputDigit", "5");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("50");
+    expect(store.getters["external/result"]).toBe(50);
 
     expect(console.error).toBeCalledTimes(0);
   });
@@ -353,7 +351,7 @@ describe("store external implementation", () => {
     await store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
     store.dispatch("external/inputDigit", "3");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("100");
+    expect(store.getters["external/result"]).toBe(100);
   });
 
   it("Obeys order of operations 2.", async () => {
@@ -399,7 +397,7 @@ describe("store external implementation", () => {
     await store.dispatch("external/inputOperator", CalcOperations.MULTIPLY);
     store.dispatch("external/inputDigit", "3");
     await store.dispatch("external/inputOperator", CalcOperations.EQUALS);
-    expect(store.getters["external/result"]).toBe("40");
+    expect(store.getters["external/result"]).toBe(40);
 
     expect(console.error).toBeCalledTimes(0);
   });
