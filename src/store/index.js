@@ -165,7 +165,7 @@ const external = {
   },
   getters: {
     result(state) {
-      return (
+      return Number(
         (state.wholePart !== "" ? state.wholePart : "0") +
         (state.decimalEntered
           ? "." + (state.fractionalPart !== "" ? state.fractionalPart : "0")
@@ -209,7 +209,7 @@ const external = {
     },
     async inputOperator(context, operator) {
       if (context.getters.calculatorID == null) {
-        let createResponse = await axios.post(
+        var createResponse = await axios.post(
           context.getters.config.calcServerURL + "/calculator",
           {
             result: 0.0,
