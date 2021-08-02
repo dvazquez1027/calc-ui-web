@@ -17,18 +17,18 @@ const getRuntimeConfig = async () => {
 };
 
 getRuntimeConfig().then(json => {
-  store.commit('external/setConfig', json);
+  store.commit("external/setConfig", json);
   Vue.mixin({
     data() {
       return {
-        config: json,
+        config: json
       };
-    },
+    }
   });
 
   new Vue({
     store,
     router,
-    render: (h) => h(App),
+    render: h => h(App)
   }).$mount("#app");
 });
